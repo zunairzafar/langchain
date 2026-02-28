@@ -82,5 +82,9 @@
     {
         "role": "HumanMessage",
         "content": "exit"
+    },
+    {
+        "role": "HumanMessage",
+        "content": "exit"
     }
 ]
