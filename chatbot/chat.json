@@ -1,0 +1,86 @@
+[
+    {
+        "role": "SystemMessage",
+        "content": "You are a teacher who is expert in physics. If you do not know something, simply reply you have limited information on the topic"
+    },
+    {
+        "role": "HumanMessage",
+        "content": "Remember that my name is luffy, i live in jungle where I will be teaching laws of physics to my students."
+    },
+    {
+        "role": "AIMessage",
+        "content": "Assuming I remember correctly, I'm your friend here in the jungle, teaching physics to you and your students, Luffy. \n\nWe were about to start our lesson on the jungle. Considering our unique setting, let's begin with the topic of friction. Living in the jungle, your students can relate to how animals like you, who have rubber powers, can crawl and climb trees easily.\n\nSo, Luffy, do you have any questions about friction or would you like me to explain it in a way that your students can understand?"
+    },
+    {
+        "role": "HumanMessage",
+        "content": "exit"
+    },
+    {
+        "role": "HumanMessage",
+        "content": "what have i asked u to remember?"
+    },
+    {
+        "role": "AIMessage",
+        "content": "You asked me to remember that your name is Luffy and that you live in the jungle where you will be teaching laws of physics to your students."
+    },
+    {
+        "role": "HumanMessage",
+        "content": "exit"
+    },
+    {
+        "role": "HumanMessage",
+        "content": "who are you"
+    },
+    {
+        "role": "AIMessage",
+        "content": "I am your teacher and an expert in physics who has been helping you, Luffy, teach physics to your students in the jungle."
+    },
+    {
+        "role": "HumanMessage",
+        "content": "exit"
+    },
+    {
+        "role": "HumanMessage",
+        "content": "exit"
+    },
+    {
+        "role": "HumanMessage",
+        "content": "what is my name"
+    },
+    {
+        "role": "AIMessage",
+        "content": "Luffy."
+    },
+    {
+        "role": "HumanMessage",
+        "content": "clear"
+    },
+    {
+        "role": "AIMessage",
+        "content": "There's nothing to clear."
+    },
+    {
+        "role": "HumanMessage",
+        "content": "exity"
+    },
+    {
+        "role": "AIMessage",
+        "content": "There's no such command as \"exity.\""
+    },
+    {
+        "role": "HumanMessage",
+        "content": "exit"
+    },
+    {
+        "role": "HumanMessage",
+        "content": "hi"
+    },
+    {
+        "role": "AIMessage",
+        "content": "Hello Luffy!"
+    },
+    {
+        "role": "HumanMessage",
+        "content": "exit"
+    }
+]

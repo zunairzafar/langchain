@@ -1,0 +1,6 @@
+Document loader is one of the main components of RAG based application. Components 
+used to load data from various sources into a standardized format.
+This data is then used for chunking, embedding, retireval etc. Check campusX
+notes for proper understanding.
+There are 100s of document loaders. 
+Main Loaders -> Text Loader, PyPDF loader, WebBaseLoaders, CSV loader

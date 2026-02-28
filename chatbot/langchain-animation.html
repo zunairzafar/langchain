@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LangChain Framework Animated Workflow</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
+        :root {
+            --bg-color: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --node-bg: #1e293b;
+            --node-border: #334155;
+            
+            /* Flow Colors */
+            --color-data: #10b981;      /* Green */
+            --color-query: #3b82f6;     /* Blue */
+            --color-llm: #8b5cf6;       /* Purple */
+            --color-langchain: #ef4444; /* Red/Pink */
+        }
+
+        body {
+            margin: 0;
+            padding: 10rem 0;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            font-weight: 800;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+            background: linear-gradient(to right, var(--color-query), var(--color-data));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 0 1rem;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            text-align: center;
+            padding: 0 1rem;
+        }
+
+        /* Scrollable wrapper to protect layout on smaller screens */
+        .diagram-wrapper {
+            width: 100%;
+            max-width: 100vw;
+            overflow-x: auto;
+            padding: 2rem;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Fixed container ensuring alignment never breaks */
+        .diagram-container {
+            position: relative;
+            width: 1200px;
+            height: 800px;
+            min-width: 1200px;
+            background: #111827;
+            border-radius: 20px;
+            border: 1px solid var(--node-border);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* SVG Connections */
+        svg.connections {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 1200px;
+            height: 800px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .path-bg {
+            fill: none;
+            stroke: #334155;
+            stroke-width: 4;
+        }
+
+        .path-flow {
+            fill: none;
+            stroke-width: 6;
+            stroke-dasharray: 15 15;
+            opacity: 0;
+        }
+
+        .path-orchestration {
+            fill: none;
+            stroke: var(--color-langchain);
+            stroke-width: 2;
+            stroke-dasharray: 8 8;
+            opacity: 0.5;
+            animation: march 5s linear infinite reverse;
+        }
+
+        /* HTML Nodes */
+        .node {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            background: var(--node-bg);
+            border: 2px solid var(--node-border);
+            border-radius: 16px;
+            padding: 1.5rem 1rem;
+            width: 160px;
+            text-align: center;
+            z-index: 10;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .node .icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .node .title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        /* Descriptive Text Labels */
+        .label {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            background: rgba(15, 23, 42, 0.95);
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid #475569;
+            width: max-content;
+            max-width: 200px;
+            text-align: center;
+            z-index: 5;
+        }
+
+        /* --- EXACT PIXEL POSITIONING --- */
+        
+        /* Node Coordinates */
+        .node.raw-data { top: 680px; left: 180px; }
+        .node.pipeline { top: 680px; left: 550px; }
+        .node.vector   { top: 680px; left: 920px; }
+        .node.prompt   { top: 400px; left: 920px; }
+        .node.ui       { top: 400px; left: 1100px; }
+        .node.llm      { top: 150px; left: 920px; }
+        .node.langchain{ top: 400px; left: 280px; border-color: var(--color-langchain); border-width: 3px; }
+
+        /* Label Coordinates */
+        .label.l-data1 { top: 715px; left: 365px; border-color: var(--color-data); color: var(--color-data);}
+        .label.l-data2 { top: 715px; left: 735px; border-color: var(--color-data); color: var(--color-data);}
+        .label.l-query { top: 500px; left: 1010px; border-color: var(--color-query); color: var(--color-query);}
+        .label.l-llm1  { top: 275px; left: 810px; border-color: var(--color-llm); color: var(--color-llm); }
+        .label.l-llm2  { top: 50px; left: 1010px; border-color: var(--color-llm); color: var(--color-llm); }
+        
+        .label.lc-1 { top: 120px; left: 600px; color: var(--color-langchain); border-color: var(--color-langchain); }
+        .label.lc-2 { top: 370px; left: 600px; color: var(--color-langchain); border-color: var(--color-langchain); }
+        .label.lc-3 { top: 250px; left: 180px; color: var(--color-langchain); border-color: var(--color-langchain); }
+        .label.lc-4 { top: 520px; left: 450px; color: var(--color-langchain); border-color: var(--color-langchain); }
+        .label.lc-5 { top: 520px; left: 750px; color: var(--color-langchain); border-color: var(--color-langchain); }
+
+        /* --- ANIMATIONS --- */
+        @keyframes flowData {
+            0% { stroke-dashoffset: 100; opacity: 0; }
+            10% { opacity: 1; }
+            50% { stroke-dashoffset: 0; opacity: 1; }
+            90% { opacity: 1; }
+            100% { stroke-dashoffset: -100; opacity: 0; }
+        }
+
+        @keyframes march { to { stroke-dashoffset: 200; } }
+
+        @keyframes pulseNode {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        @keyframes glowData { 50% { box-shadow: 0 0 25px rgba(16,185,129,0.5), inset 0 0 10px rgba(16,185,129,0.3); border-color: var(--color-data); } }
+        @keyframes glowQuery { 50% { box-shadow: 0 0 25px rgba(59,130,246,0.5), inset 0 0 10px rgba(59,130,246,0.3); border-color: var(--color-query); } }
+        @keyframes glowLLM { 50% { box-shadow: 0 0 25px rgba(139,92,246,0.5), inset 0 0 10px rgba(139,92,246,0.3); border-color: var(--color-llm); } }
+        @keyframes glowLC { 50% { box-shadow: 0 0 40px rgba(239,68,68,0.4); } }
+
+        /* Animation Timings */
+        .flow-data-1 { stroke: var(--color-data); animation: flowData 12s linear infinite; animation-delay: 0s; }
+        .flow-data-2 { stroke: var(--color-data); animation: flowData 12s linear infinite; animation-delay: 1s; }
+        .node.raw-data { animation: pulseNode 12s infinite 0s, glowData 12s infinite 0s; }
+        .node.pipeline { animation: pulseNode 12s infinite 1s, glowData 12s infinite 1s; }
+        .node.vector { animation: pulseNode 12s infinite 2s, glowData 12s infinite 2s; }
+
+        .flow-query { stroke: var(--color-query); animation: flowData 12s linear infinite; animation-delay: 4s; }
+        .flow-retrieve { stroke: var(--color-data); animation: flowData 12s linear infinite; animation-delay: 5s; }
+        .node.ui { animation: pulseNode 12s infinite 4s, glowQuery 12s infinite 4s; }
+        .node.prompt { animation: pulseNode 12s infinite 5s, glowQuery 12s infinite 5s; }
+
+        .flow-llm-up { stroke: var(--color-llm); animation: flowData 12s linear infinite; animation-delay: 7s; }
+        .flow-llm-down { stroke: var(--color-llm); animation: flowData 12s linear infinite; animation-delay: 8s; }
+        .node.llm { animation: pulseNode 12s infinite 7.5s, glowLLM 12s infinite 7.5s; }
+        
+        .node.langchain { animation: glowLC 4s infinite ease-in-out; }
+
+    </style>
+</head>
+<body>
+
+    <h1>LangChain Architecture Flow</h1>
+    <p class="subtitle">By: Zunair Zafar.</p>
+
+    <div class="diagram-wrapper">
+        <div class="diagram-container">
+            <svg class="connections" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+                
+                <path class="path-orchestration" d="M280,400 L280,150 L920,150" /> 
+                <path class="path-orchestration" d="M280,400 L920,400" /> 
+                <path class="path-orchestration" d="M280,400 L180,400 L180,680" /> 
+                <path class="path-orchestration" d="M280,400 L280,550 L550,550 L550,680" /> 
+                <path class="path-orchestration" d="M280,400 L280,550 L920,550 L920,680" />
+
+                <path class="path-bg" d="M180,680 L550,680" /> <path class="path-bg" d="M550,680 L920,680" /> <path class="path-bg" d="M1100,400 L920,400" /> <path class="path-bg" d="M920,680 L920,400" /> <path class="path-bg" d="M920,400 L920,150" /> <path class="path-bg" d="M920,150 L1100,150 L1100,400" /> <path class="path-flow flow-data-1" d="M180,680 L550,680" />
+                <path class="path-flow flow-data-2" d="M550,680 L920,680" />
+                
+                <path class="path-flow flow-query" d="M1100,400 L920,400" />
+                <path class="path-flow flow-retrieve" d="M920,680 L920,400" />
+                
+                <path class="path-flow flow-llm-up" d="M920,400 L920,150" />
+                <path class="path-flow flow-llm-down" d="M920,150 L1100,150 L1100,400" />
+            </svg>
+
+            <div class="node ui">
+                <span class="icon">🖥️</span>
+                <span class="title">User Interface</span>
+            </div>
+            <div class="node prompt">
+                <span class="icon">🛠️</span>
+                <span class="title">Prompt Engineering</span>
+            </div>
+            <div class="node llm">
+                <span class="icon">🧠</span>
+                <span class="title">LLM</span>
+            </div>
+            <div class="node langchain">
+                <span class="icon">🦜🔗</span>
+                <span class="title">LangChain Framework</span>
+            </div>
+            <div class="node raw-data">
+                <span class="icon">📄</span>
+                <span class="title">Raw Data Sources</span>
+            </div>
+            <div class="node pipeline">
+                <span class="icon">⚙️</span>
+                <span class="title">Data Pipeline</span>
+            </div>
+            <div class="node vector">
+                <span class="icon">🗄️</span>
+                <span class="title">Vector Store</span>
+            </div>
+
+            <div class="label l-data1">Pre-processing & Embeddings</div>
+            <div class="label l-data2">Store in DB</div>
+            <div class="label l-query">User Input Query</div>
+            <div class="label l-llm1">Context + Prompt to Model</div>
+            <div class="label l-llm2">Generated Output back to User</div>
+
+            <div class="label lc-1">Interface with Providers</div>
+            <div class="label lc-2">Create Prompt Templates</div>
+            <div class="label lc-3">Fetch External Data</div>
+            <div class="label lc-4">Manage Pre-processing</div>
+            <div class="label lc-5">Retrieve Embeddings</div>
+
+        </div>
+    </div>
+
+</body>
+</html>
