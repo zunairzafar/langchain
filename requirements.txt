@@ -1,3 +1,4 @@
+uvloop==0.22.1; sys_platform != "win32"
 beautifulsoup4
 flax>=0.12.3
 grandalf>=0.8
