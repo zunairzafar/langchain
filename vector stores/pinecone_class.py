@@ -4,6 +4,7 @@ from langchain_pinecone import PineconeVectorStore
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_core.documents import Document
 from pinecone import Pinecone, ServerlessSpec
+import streamlit as st
 
 class PineconeDocumentStore:
     def __init__(self):
@@ -18,7 +19,7 @@ class PineconeDocumentStore:
         self.embedding = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-MiniLM-L3-v2")
 
         # Initialize Pinecone
-        self.pinecone_api_key = os.getenv("PINECONE_API_KEY")
+        self.pinecone_api_key = st.secrets["general"]["streamlit_api_key"]
         if not self.pinecone_api_key:
             raise ValueError("PINECONE_API_KEY is missing. Add it to your .env file.")
         
