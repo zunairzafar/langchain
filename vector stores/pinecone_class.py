@@ -11,9 +11,8 @@ class PineconeDocumentStore:
         # Load environment variables
         load_dotenv()
 
-        os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
-        os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
-        os.environ["HF_TOKEN"] = os.getenv("HF_TOKEN")
+        st.secrets["HF_TOKEN"]
+        os.environ["HF_TOKEN"] = st.secrets["HF_TOKEN"]
 
         # Initialize the embedding function
         self.embedding = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-MiniLM-L3-v2")
