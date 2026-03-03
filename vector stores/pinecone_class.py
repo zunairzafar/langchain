@@ -19,11 +19,11 @@ class PineconeDocumentStore:
         self.embedding = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-MiniLM-L3-v2")
 
         # Initialize Pinecone
-        self.pinecone_api_key = st.secrets["general"]["streamlit_api_key"]
+        self.pinecone_api_key = st.secrets["streamlit_api_key"]
         if not self.pinecone_api_key:
             raise ValueError("PINECONE_API_KEY is missing. Add it to your .env file.")
         
-        self.index_name = os.getenv("PINECONE_INDEX", "my-vector-index")
+        self.index_name = st.secrets["pinecone_index"]
 
         # Set up Pinecone client
         self.pc = Pinecone(api_key=self.pinecone_api_key)
