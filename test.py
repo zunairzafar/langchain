@@ -6,3 +6,4 @@ def add_one(x: int) -> int:
 
 # This WOULD raise a ValidationError
 x = add_one(3.2323)
+

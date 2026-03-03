@@ -24,5 +24,3 @@ if st.button('Submit'):
     result = model.invoke(user_input)
 
     st.write(result.content)
-
-
