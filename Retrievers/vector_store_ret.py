@@ -39,11 +39,12 @@ index = pc.Index(index_name)
 
 vector_store = PineconeVectorStore(index=index, embedding=embedding)
 
-results = vector_store.similarity_search(
-    query="Who was the businessman and entrepreneur?", k=3
-)
+retriever = vector_store.as_retriever(search_type = "mmr",search_kwargs={"k": 2, "lambda_mult": 0.5})
+query = "Best universities in the world?"
 
-# Print the search results
-print("Top match:")
-for index, result in enumerate(results, start=1):
-    print(f"{index}. {result.metadata.get('name', 'Unknown')} -> {result.page_content}")
+results = retriever.invoke(query)
+
+for i, result in enumerate(results):
+    print(f"Result from Retriever {i+1}:")
+    print(result.page_content)
+    print("\n---\n")
