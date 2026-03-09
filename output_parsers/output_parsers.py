@@ -40,3 +40,5 @@ chain = template1 | model | parser | template2 | model | parser
 result = chain.invoke({'topic': "Proxmia Centauri"})
 
 print(result)
+from langchain.tools import tool
+

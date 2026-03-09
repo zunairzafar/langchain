@@ -1,18 +1,11 @@
 import os
 from dotenv import load_dotenv
 from langchain_pinecone import PineconeVectorStore
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings, HuggingFaceEndpoint, ChatHuggingFace
 from langchain_core.documents import Document
 from pinecone import Pinecone, ServerlessSpec
-
 # Load environment variables
 load_dotenv()
-
-
-os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
-os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
-os.environ["HF_TOKEN"] = os.getenv("HF_TOKEN")
-
 embedding = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-MiniLM-L3-v2")
 
 
@@ -48,3 +41,4 @@ for i, result in enumerate(results):
     print(f"Result from Retriever {i+1}:")
     print(result.page_content)
     print("\n---\n")
+############################################################################
