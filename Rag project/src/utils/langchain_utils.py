@@ -12,14 +12,37 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate, PromptTemplate
 from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
 
-# Load .env from the project root (Rag project/) regardless of CWD
-_PROJECT_ROOT = Path(__file__).resolve().parents[2]
-load_dotenv(_PROJECT_ROOT / ".env")
-os.environ["HF_TOKEN"] = os.getenv("HF_TOKEN", "")
+
+def _load_hf_token() -> None:
+    """Load HF_TOKEN into os.environ from Streamlit secrets or .env fallback."""
+    # Already set (e.g. by a previous call or system env)
+    if os.environ.get("HF_TOKEN"):
+        return
+
+    # 1️⃣  Try Streamlit secrets (used on Streamlit Cloud)
+    try:
+        import streamlit as st
+        token = st.secrets.get("HF_TOKEN", "")
+        if token:
+            os.environ["HF_TOKEN"] = token
+            return
+    except Exception:
+        pass  # not running inside Streamlit, or secrets not configured
+
+    # 2️⃣  Fallback: .env file (local development)
+    try:
+        from dotenv import load_dotenv
+        _PROJECT_ROOT = Path(__file__).resolve().parents[2]
+        load_dotenv(_PROJECT_ROOT / ".env")
+        os.environ["HF_TOKEN"] = os.getenv("HF_TOKEN", "")
+    except Exception:
+        pass
+
+
+_load_hf_token()
 
 # ---------------------------------------------------------------------------
 # Prompt templates
